@@ -1,4 +1,5 @@
 use std::io;
+use std::process;
 
 fn main() {
     let fib = fibonacci(read_input());
@@ -24,13 +25,14 @@ fn read_input() -> usize {
 
     io::stdin().read_line(&mut input).expect("can't read size");
 
-    let size: usize = input.trim().parse().unwrap();
+    let number: usize = input.trim().parse().unwrap();
 
-    if size > 45 {
-        panic!("number must be in [0,45]")
+    if number > 45 {
+        println!("number must be in [0,45]");
+        process::exit(1);
     }
 
-    size
+    number
 }
 
 #[cfg(test)]
