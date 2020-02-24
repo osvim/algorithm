@@ -80,7 +80,7 @@ mod tests {
     }
 
     fn gen_long_vec() -> Vec<i64> {
-        let cap = 100_000;
+        let cap = 1_000_000;
         let mut rng = rand::thread_rng();
         let mut ints = Vec::<i64>::with_capacity(cap);
 
