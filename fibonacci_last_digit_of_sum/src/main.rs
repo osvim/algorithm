@@ -9,7 +9,7 @@ fn main() {
 fn fibonacci_last_digit_of_sum(n: usize) -> usize {
     let period = pisano_period();
 
-    period[(n + 2) % period.len()] - 1
+    (period[(n + 2) % period.len()] + 9) % 10
 }
 // period for modulo 10
 fn pisano_period() -> Vec<usize> {
