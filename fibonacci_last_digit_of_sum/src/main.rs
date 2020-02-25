@@ -4,7 +4,7 @@ use std::process;
 fn main() {
     println!("{}", fibonacci_last_digit_of_sum(read_input()));
 }
-// sum(f(0) + f(1) + ... + f(n)) = f(n + 2) - 1 (math induction)
+// f(0) + f(1) + ... + f(n) = f(n + 2) - 1 (math induction)
 // so last digit of sum: f(n + 2) mod 10 - 1
 fn fibonacci_last_digit_of_sum(n: usize) -> usize {
     let period = pisano_period();

@@ -23,7 +23,9 @@ fn fibonacci_last_digit(n: usize) -> usize {
 fn read_input() -> usize {
     let mut input = String::new();
 
-    io::stdin().read_line(&mut input).expect("can't read number");
+    io::stdin()
+        .read_line(&mut input)
+        .expect("can't read number");
 
     let number: usize = input.trim().parse().unwrap();
 
@@ -37,7 +39,6 @@ fn read_input() -> usize {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]
