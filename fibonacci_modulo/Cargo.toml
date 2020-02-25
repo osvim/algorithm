@@ -1,0 +1,9 @@
+[package]
+name = "fibonacci_modulo"
+version = "0.1.0"
+authors = ["Vadim Ostapenko <id3498735@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]

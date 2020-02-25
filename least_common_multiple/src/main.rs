@@ -6,7 +6,7 @@ fn main() {
     println!("{:?}", lcm(tup.0, tup.1));
 }
 fn lcm(first: usize, second: usize) -> usize {
-    return first * second / gcd(first, second);
+    first * second / gcd(first, second)
 }
 
 fn gcd(first: usize, second: usize) -> usize {
@@ -31,7 +31,9 @@ fn gcd(first: usize, second: usize) -> usize {
 
 fn read_input() -> (usize, usize) {
     let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("can't read numbers");
+    io::stdin()
+        .read_line(&mut input)
+        .expect("can't read numbers");
 
     let mut numbers: Vec<usize> = Vec::with_capacity(2);
 
@@ -63,11 +65,8 @@ mod tests {
 
     #[test]
     fn test_fibonacci() {
-        let tests: Vec<(usize, usize, usize)> = vec![
-            (6,8,24),
-            (3, 5, 15),
-            (761457, 614573, 467970912861)
-        ];
+        let tests: Vec<(usize, usize, usize)> =
+            vec![(6, 8, 24), (3, 5, 15), (761457, 614573, 467970912861)];
 
         for test in tests.into_iter() {
             assert_eq!(test.2, lcm(test.0, test.1))
