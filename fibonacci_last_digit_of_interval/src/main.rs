@@ -1,6 +1,5 @@
 use std::io;
 use std::process;
-use std::usize;
 
 fn main() {
     let tup: (usize, usize) = read_input();
