@@ -25,10 +25,9 @@ fn calc_fibonacci_last_digit_of_interval(n: usize, m: usize) -> usize {
     let s = period[(m + 1) % period.len()];
 
     if f < s {
-        return 10 - (s - f) % 10;
+        10 - (s - f) % 10
     }
-
-    return f - s;
+    f - s
 }
 
 // period for modulo 10
@@ -53,7 +52,7 @@ fn pisano_period() -> Vec<usize> {
 fn read_input() -> (usize, usize) {
     let mut input = String::new();
     io::stdin()
-        .read_line(&mut input)
+        .read_line(& input)
         .expect("can't read numbers");
 
     let mut numbers: Vec<usize> = Vec::with_capacity(2);

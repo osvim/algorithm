@@ -144,6 +144,7 @@ mod tests {
         let tests: Vec<(Problem, isize)> = vec![
             (Problem { distance: 900, capacity: 400, stops: vec![200, 375, 550, 750] }, 2),
             (Problem { distance: 10, capacity: 3, stops: vec![1, 2, 5, 9] }, -1),
+            (Problem { distance: 200, capacity: 250, stops: vec![100, 150] }, 0),
         ];
 
         for mut test in tests.into_iter() {
