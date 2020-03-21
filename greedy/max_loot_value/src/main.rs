@@ -51,7 +51,7 @@ impl Knapsack {
 
 fn read_input() -> Knapsack {
     let mut knapsack = read_knapsack();
-    for _ in 0..knapsack.capacity {
+    for _ in 0..knapsack.loot.capacity() {
         knapsack.loot.push(read_item())
     }
 
@@ -128,8 +128,8 @@ fn read_knapsack() -> Knapsack {
     }
 
     Knapsack {
-        capacity: numbers[0],
-        loot: Vec::with_capacity(numbers[1]),
+        capacity: numbers[1],
+        loot: Vec::with_capacity(numbers[0]),
     }
 }
 
