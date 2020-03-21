@@ -19,19 +19,26 @@ impl Problem {
 
         let mut refills: isize = 0;
         let mut pos: usize = 0;
-        let mut last: usize = pos;
+        let mut prev: usize = 0;
 
         for stop in self.stops.iter() {
-            if *stop <= self.capacity + last {
+            if prev + self.capacity >= *stop {
                 pos = *stop;
                 continue;
             }
 
-            if last < pos {
-                last = pos;
+            if prev < pos {
+                prev = pos;
                 refills += 1;
+
+                if prev + self.capacity < *stop {
+                    return -1;
+                }
+
+                pos = *stop;
                 continue;
             }
+
             return -1;
         }
 
@@ -46,9 +53,9 @@ fn read_input() -> Problem {
     let stops = read_stops(distance, amount);
 
     Problem {
-        distance: distance,
-        capacity: capacity,
-        stops: stops,
+        distance,
+        capacity,
+        stops,
     }
 }
 
@@ -144,6 +151,7 @@ mod tests {
         let tests: Vec<(Problem, isize)> = vec![
             (Problem { distance: 900, capacity: 400, stops: vec![200, 375, 550, 750] }, 2),
             (Problem { distance: 10, capacity: 3, stops: vec![1, 2, 5, 9] }, -1),
+            (Problem { distance: 700, capacity: 200, stops: vec![100, 200, 300, 400] }, -1),
             (Problem { distance: 200, capacity: 250, stops: vec![100, 150] }, 0),
         ];
 
