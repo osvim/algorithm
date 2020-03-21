@@ -19,25 +19,26 @@ fn max_salary(mut nums: Vec<usize>) -> String {
     result
 }
 
-fn greater_or_equal(mut a: usize, mut b: usize) -> Ordering {
+fn greater_or_equal(a: usize, b: usize) -> Ordering {
     let len_a = len_usize(a);
     let len_b = len_usize(b);
 
-    if len_a > len_b {
-        for _ in len_b..len_a {
-            b = b * 10 + 9;
-        }
+    let mut f = a;
+    for _ in 0..len_b {
+        f *= 10;
     }
-    if len_a < len_b {
-        for _ in len_a..len_b {
-            a = a * 10 + 9;
-        }
-    }
+    f += b;
 
-    if a > b {
+    let mut s = b;
+    for _ in 0..len_a {
+        s *= 10;
+    }
+    s += a;
+
+    if f > s {
         return Ordering::Greater;
     }
-    if a < b {
+    if f < s {
         return Ordering::Less;
     }
     return Ordering::Equal;
@@ -90,7 +91,7 @@ fn read_input(n: usize) -> Vec<usize> {
 
         result.push(value);
         if result.len() == result.capacity() {
-            break
+            break;
         }
     }
 
@@ -107,6 +108,8 @@ mod tests {
             (vec![21, 2], String::from("221")),
             (vec![9, 4, 6, 1, 9], String::from("99641")),
             (vec![5, 523, 45], String::from("552345")),
+            (vec![5, 52, 57, 517, 569, 581, 532], String::from("58157569553252517")),
+
         ];
 
         for test in tests.into_iter() {
