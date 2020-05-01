@@ -1,9 +1,10 @@
 use std::io;
 use std::process;
+use std::cmp::Ordering;
 
 fn main() {
     let (segments_number, points_number) = read_segments_points_number();
-    let mut values: Vec<Value> = Vec::with_capacity(2*segments_number + points_number);
+    let mut values: Vec<Value> = Vec::with_capacity(2 * segments_number + points_number);
 
     read_segments(&mut values, segments_number);
     read_points(&mut values, points_number);
@@ -64,7 +65,7 @@ fn read_segments(values: &mut Vec<Value>, number: usize) {
 
         for val in input.trim().split_whitespace() {
             let value: isize = val.parse().unwrap();
-            if value < - 100_000_000 || value > 100_000_000 {
+            if value < -100_000_000 || value > 100_000_000 {
                 println!("value must be in [-10^8,10^8], given: {}", value);
                 process::exit(1)
             }
@@ -96,7 +97,7 @@ fn read_points(values: &mut Vec<Value>, number: usize) {
     let mut i: usize = 0;
     for val in input.trim().split_whitespace() {
         let value: isize = val.parse().unwrap();
-        if value < - 100_000_000 || value > 100_000_000 {
+        if value < -100_000_000 || value > 100_000_000 {
             println!("value must be in [-10^8,10^8], given: {}", value);
             process::exit(1)
         }
@@ -110,7 +111,22 @@ fn read_points(values: &mut Vec<Value>, number: usize) {
 }
 
 fn run_lottery(items: &mut Vec<Value>) -> Vec<Point> {
-    items.sort_by(|a, b| a.value().cmp(&b.value()));
+    items.sort_by(|a, b| {
+        let ordering = a.value().cmp(&b.value());
+        match ordering {
+            Ordering::Equal => {
+                let idx = |x: &Value| match x {
+                    Value::Edge(e) => {
+                        if e.is_start() { -1 } else { 1 }
+                    }
+                    Value::Point(..) => 0
+                };
+
+                idx(a).cmp(&idx(b))
+            }
+            _ => ordering
+        }
+    });
 
     let mut opened: isize = 0;
     let mut points: Vec<Point> = Vec::new();
@@ -195,6 +211,11 @@ mod tests {
                 Value::new_edge(7, true), Value::new_edge(10, false),
                 Value::new_point(1, 0), Value::new_point(6, 1)
             ], vec![2, 0]),
+            (vec![
+                Value::new_edge(0, true), Value::new_edge(1, false),
+                Value::new_edge(1, true), Value::new_edge(2, false),
+                Value::new_point(1, 0),
+            ], vec![2])
         ];
 
         for mut test in tests.into_iter() {
