@@ -1,5 +1,112 @@
+use std::io;
+use std::process;
+
 fn main() {
-    println!("Hello, world!");
+    let (segments_number, points_number) = read_segments_points_number();
+    let mut values: Vec<Value> = Vec::with_capacity(2*segments_number + points_number);
+
+    read_segments(&mut values, segments_number);
+    read_points(&mut values, points_number);
+
+    let mut points = run_lottery(&mut values);
+    points.sort_by(|a, b| a.order().cmp(&b.order()));
+
+    let result = points.iter().map(|p| p.segments()).collect::<Vec<isize>>();
+
+    let mut res = String::new();
+
+    for p in result.iter() {
+        if res.len() > 0 {
+            res.push_str(" ");
+        }
+
+        res.push_str(&p.to_string());
+    }
+
+    println!("{}", res);
+}
+
+fn read_segments_points_number() -> (usize, usize) {
+    let mut input = String::new();
+
+    io::stdin()
+        .read_line(&mut input)
+        .expect("can't read number");
+
+    let mut slice: Vec<usize> = Vec::with_capacity(2);
+
+    for val in input.trim().split_whitespace() {
+        let value = val.parse().unwrap();
+        if value < 1 || value > 50_000 {
+            println!("value must be in [1,50000], given: {}", value);
+            process::exit(1)
+        }
+
+        slice.push(value);
+        if slice.len() == slice.capacity() {
+            return (slice[0], slice[1]);
+        }
+    }
+
+    println!("must be provided 2 values");
+    process::exit(1)
+}
+
+fn read_segments(values: &mut Vec<Value>, number: usize) {
+    let mut input = String::new();
+
+    for _ in 0..number {
+        io::stdin()
+            .read_line(&mut input)
+            .expect("can't read number");
+
+        let mut slice: Vec<isize> = Vec::with_capacity(2);
+
+        for val in input.trim().split_whitespace() {
+            let value: isize = val.parse().unwrap();
+            if value < - 100_000_000 || value > 100_000_000 {
+                println!("value must be in [-10^8,10^8], given: {}", value);
+                process::exit(1)
+            }
+
+            slice.push(value);
+
+            if slice.len() == slice.capacity() {
+                if slice[0] > slice[1] {
+                    println!("start segment must be not greater then end, given [{},{}]", slice[0], slice[1]);
+                    process::exit(1)
+                }
+
+                values.push(Value::new_edge(slice[0], true));
+                values.push(Value::new_edge(slice[1], false));
+                break;
+            }
+        }
+
+        input = String::new();
+    }
+}
+
+fn read_points(values: &mut Vec<Value>, number: usize) {
+    let mut input = String::new();
+    io::stdin()
+        .read_line(&mut input)
+        .expect("can't read number");
+
+    let mut i: usize = 0;
+    for val in input.trim().split_whitespace() {
+        let value: isize = val.parse().unwrap();
+        if value < - 100_000_000 || value > 100_000_000 {
+            println!("value must be in [-10^8,10^8], given: {}", value);
+            process::exit(1)
+        }
+
+        values.push(Value::new_point(value, i));
+        i += 1;
+        if i == number {
+            break;
+        }
+    }
 }
 
 fn run_lottery(items: &mut Vec<Value>) -> Vec<Point> {
@@ -22,6 +129,7 @@ fn run_lottery(items: &mut Vec<Value>) -> Vec<Point> {
     points
 }
 
+#[derive(Debug)]
 enum Value {
     Point(Point),
     Edge(Edge),
@@ -39,6 +147,7 @@ impl Value {
     fn new_point(value: isize, order: usize) -> Value { Value::Point(Point::new(value, order, 0)) }
 }
 
+#[derive(Debug)]
 struct Point {
     value: isize,
     order: usize,
@@ -52,6 +161,7 @@ impl Point {
     fn segments(&self) -> isize { self.segments }
 }
 
+#[derive(Debug)]
 struct Edge {
     value: isize,
     is_start: bool,
