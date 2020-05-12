@@ -1,7 +1,6 @@
 use std::io;
 use std::process;
 
-
 fn main() {
     let money = read_input();
     println!("{}", change_money(money));
@@ -13,7 +12,7 @@ fn change_money(money: usize) -> usize {
     let mut changes: Vec<usize> = vec![std::usize::MAX; money + 1];
     changes[0] = 0;
 
-    for m in 1..money+1 {
+    for m in 1..money + 1 {
         for coin in COINS.iter() {
             if m >= *coin {
                 let c = changes[m - *coin] + 1;
